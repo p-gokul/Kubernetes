@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: prisma-migrate
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: gokulpant/todo-backend
+          command: ["npx", "prisma", "migrate", "deploy"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: DATABASE_URL
+      restartPolicy: OnFailure
