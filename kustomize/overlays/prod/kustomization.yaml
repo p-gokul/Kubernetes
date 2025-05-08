@@ -1,0 +1,8 @@
+resources:
+  - ../../base
+
+patches:
+  - path: frontend.yaml
+  - path: backend.yaml
+  - path: ingress.yaml
+  - path: configmap.yaml

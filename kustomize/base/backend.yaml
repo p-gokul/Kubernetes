@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-backend
+spec:
+  type: ClusterIP
+  selector:
+    app: todo-backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-backend
+spec:
+  selector:
+    matchLabels:
+      app: todo-backend
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+    spec:
+      containers:
+        - name: backend
+          image: gokulpant/todo-backend
+          ports:
+            - containerPort: 5000
+          env:
+            - name: ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: ORIGIN
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: DATABASE_URL

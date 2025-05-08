@@ -1,0 +1,11 @@
+resources:
+  - backend.yaml
+  - frontend.yaml
+  - configmap.yaml
+  - ingress.yaml
+  - job-prisma-migrate.yaml
+  - postgres.yaml
+  - pvc.yaml
+  - secret.yaml
+
+namespace: todo

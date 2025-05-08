@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  ORIGIN: "http://todo.example.com"
+  API_URL: "http://todo-api.example.com"
