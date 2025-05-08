@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.job.name }}
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: {{ .Values.job.image }}
+          command: {{ toYaml .Values.job.command | nindent 12 }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.config.name }}
+                  key: DATABASE_URL
+      restartPolicy: OnFailure

@@ -1,0 +1,68 @@
+# Replica
+replicaCount: 1
+
+# Backend
+backend:
+  service: todo-backend
+  repository: gokulpant/todo-backend
+  imageTag: latest
+  imagePullPolicy: IfNotPresent
+  name: todo-backend
+  type: ClusterIP
+  port: 5000
+  targetPort: 5000
+
+# Frontend
+frontend:
+  service: todo-frontend
+  repository: gokulpant/todo-frontend
+  imageTag: latest
+  imagePullPolicy: IfNotPresent
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+
+# DB
+database:
+  repository: postgres
+  name: postgres-db
+  type: ClusterIP
+  port: 5432
+  targetPort: 5432
+  clusterIP: None
+  mountPath: /var/lib/postgresql/data
+
+# ConfigMap
+config:
+  name: config
+  origin: "http://todo.example.com"
+  databaseUrl: "postgres://admin:pass@postgres-db:5432/todos"
+  apiUrl: "http://todo-api.example.com"
+
+# Secrets
+secrets:
+  name: db-secret
+  dbSecret:
+    POSTGRES_USER: YWRtaW4= # "admin"
+    POSTGRES_PASSWORD: cGFzcw== # "pass"
+
+# PVC
+persistentVolumeClaims:
+  name: pgdata
+  storage: 1Gi
+
+# Job
+job:
+  name: prisma-migrate
+  image: gokulpant/todo-backend
+  command:
+    - npx
+    - prisma
+    - migrate
+    - deploy
+
+# Ingress
+ingress:
+  hosts:
+    frontendHost: "todo.example.com"
+    backendHost: "todo-api.example.com"
